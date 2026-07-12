@@ -20,7 +20,7 @@ function App() {
     <ErrorBoundary>
       <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
           <AppRoutes />
         </BrowserRouter>
       </QueryClientProvider>
