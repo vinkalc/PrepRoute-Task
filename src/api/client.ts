@@ -32,6 +32,7 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     const status = error.response?.status
+    console.error('API Response Error Details:', error.response?.data);
     let message = error.response?.data?.message || error.message || 'An unexpected error occurred'
 
     // Extract detail from validation errors array or object structure

@@ -288,7 +288,7 @@ export const questionService = {
       const matchedTopic = lookups.topics.find(t => t.id === q.topic_id || t.name === q.topic_id)
       const matchedSubTopic = lookups.subTopics.find(s => s.id === q.sub_topic_id || s.name === q.sub_topic_id)
 
-      return {
+      const payload: any = {
         type: q.type || 'mcq',
         question: q.question,
         option1: q.option1,
@@ -296,14 +296,27 @@ export const questionService = {
         option3: q.option3,
         option4: q.option4,
         correct_option: q.correct_option,
-        explanation: q.explanation || '',
         difficulty: q.difficulty || 'medium',
         test_id: q.test_id,
-        media_url: q.media_url || null,
-        subject: subjectUuid,
-        topic: matchedTopic ? matchedTopic.name : null,
-        sub_topic: matchedSubTopic ? matchedSubTopic.name : null
       }
+
+      if (q.explanation && q.explanation.trim() !== '') {
+        payload.explanation = q.explanation
+      }
+      if (q.media_url && q.media_url.trim() !== '') {
+        payload.media_url = q.media_url
+      }
+      if (subjectUuid) {
+        payload.subject = subjectUuid
+      }
+      if (matchedTopic) {
+        payload.topic = matchedTopic.name
+      }
+      if (matchedSubTopic) {
+        payload.sub_topic = matchedSubTopic.name
+      }
+
+      return payload
     })
 
     const response = await apiClient.post('/questions/bulk', { questions: payloadQuestions })
