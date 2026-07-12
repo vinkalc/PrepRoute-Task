@@ -59,6 +59,15 @@ export const EditTestModal: React.FC<EditTestModalProps> = ({
   const watchSubject = watch('subject')
   const watchTopics = watch('topics')
   const watchType = watch('type')
+  const watchCorrectMarks = watch('correct_marks')
+  const watchTotalQuestions = watch('total_questions')
+
+  // Auto-calculate Total Marks as Correct Marks * No. of Questions
+  useEffect(() => {
+    const qCount = Number(watchTotalQuestions) || 0
+    const correctVal = Number(watchCorrectMarks) || 0
+    setValue('total_marks', qCount * correctVal, { shouldDirty: true })
+  }, [watchTotalQuestions, watchCorrectMarks, setValue])
 
   // 1. Fetch Subjects
   const { data: subjectsResponse, isLoading: isSubjectsLoading } = useQuery({
@@ -468,10 +477,9 @@ export const EditTestModal: React.FC<EditTestModalProps> = ({
                     <input
                       type="number"
                       placeholder="Ex:250 Marks"
-                      {...register('total_marks')}
-                      className={`w-full bg-white border ${
-                        errors.total_marks ? 'border-red-500 focus:ring-red-200' : 'border-slate-200 focus:border-indigo-400 focus:ring-indigo-100'
-                      } focus:ring-2 focus:outline-none text-slate-850 rounded-xl py-3 px-4 text-sm transition-all placeholder-slate-400`}
+                      readOnly
+                      {...register('total_marks', { valueAsNumber: true })}
+                      className="w-full bg-slate-50 border border-slate-200 text-slate-500 cursor-not-allowed select-none rounded-xl py-3 px-4 text-sm transition-all focus:outline-none placeholder-slate-400"
                     />
                     {errors.total_marks && <p className="text-xs font-medium text-red-500 pl-1">{errors.total_marks.message}</p>}
                   </div>
