@@ -2,7 +2,10 @@ import axios from 'axios'
 import { useAuthStore } from '../store/authStore'
 import toast from 'react-hot-toast'
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+// Force relative '/api' on Netlify/Vercel to route requests through same-origin CDN proxy redirects and bypass CORS.
+const BASE_URL = (typeof window !== 'undefined' && (window.location.hostname.endsWith('netlify.app') || window.location.hostname.endsWith('vercel.app')))
+  ? '/api'
+  : (import.meta.env.VITE_API_BASE_URL || '/api');
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
