@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { testService, subjectService, topicService } from '../services/api'
-import { 
-  Plus, 
-  Search, 
-  Filter, 
-  Edit3, 
-  Eye, 
-  Trash2, 
-  Loader2, 
-  AlertCircle, 
-  BookOpen, 
+import {
+  Plus,
+  Search,
+  Filter,
+  Edit3,
+  Eye,
+  Trash2,
+  Loader2,
+  AlertCircle,
+  BookOpen,
   Calendar,
   FileSpreadsheet,
   ChevronLeft,
@@ -21,7 +21,7 @@ import toast from 'react-hot-toast'
 
 export const Dashboard: React.FC = () => {
   const queryClient = useQueryClient()
-  
+
   // Search & Filter State
   const [search, setSearch] = useState('')
   const [subjectFilter, setSubjectFilter] = useState('')
@@ -38,11 +38,11 @@ export const Dashboard: React.FC = () => {
   }, [search, subjectFilter, statusFilter, sortBy])
 
   // Fetch Tests
-  const { 
-    data: testsResponse, 
-    isLoading: isTestsLoading, 
-    isError: isTestsError, 
-    error: testsError 
+  const {
+    data: testsResponse,
+    isLoading: isTestsLoading,
+    isError: isTestsError,
+    error: testsError
   } = useQuery({
     queryKey: ['tests'],
     queryFn: testService.getAll,
@@ -78,7 +78,7 @@ export const Dashboard: React.FC = () => {
     },
     onSuccess: (_, id) => {
       toast.success('Test deleted successfully')
-      
+
       // Update cache
       queryClient.setQueryData(['tests'], (old: any) => {
         if (!old || !old.data) return old
@@ -108,8 +108,8 @@ export const Dashboard: React.FC = () => {
     // Search filter
     if (search.trim() !== '') {
       const q = search.toLowerCase()
-      result = result.filter(test => 
-        test.name.toLowerCase().includes(q) || 
+      result = result.filter(test =>
+        test.name.toLowerCase().includes(q) ||
         (test.subject && test.subject.toLowerCase().includes(q))
       )
     }
@@ -164,7 +164,7 @@ export const Dashboard: React.FC = () => {
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">Test Dashboard</h1>
           <p className="text-slate-500 text-sm mt-1">Manage assessment tests, topics, and question lists.</p>
         </div>
-        <Link 
+        <Link
           to="/tests/new"
           className="flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 px-4 rounded-xl shadow-sm hover:shadow-md transition-all text-sm cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0"
         >
@@ -176,7 +176,7 @@ export const Dashboard: React.FC = () => {
       {/* Filter and Search Panel */}
       <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-sm">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          
+
           {/* Search bar */}
           <div className="relative md:col-span-2">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
@@ -268,7 +268,7 @@ export const Dashboard: React.FC = () => {
           <AlertCircle className="mx-auto text-red-500 mb-3" size={36} />
           <h3 className="font-bold text-lg">Failed to load tests</h3>
           <p className="text-sm mt-1 text-red-600/95">{(testsError as any)?.message || 'There was a problem communicating with the server.'}</p>
-          <button 
+          <button
             onClick={() => queryClient.invalidateQueries({ queryKey: ['tests'] })}
             className="mt-4 bg-red-100 hover:bg-red-200 text-red-800 font-semibold py-2 px-4 rounded-xl text-xs transition-all cursor-pointer"
           >
@@ -282,13 +282,13 @@ export const Dashboard: React.FC = () => {
           </div>
           <h3 className="text-lg font-bold text-slate-800">No Tests Found</h3>
           <p className="text-slate-500 text-sm mt-2 leading-relaxed">
-            {search || subjectFilter || statusFilter 
-              ? 'No tests match your current search queries or filter settings. Try adjusting them.' 
+            {search || subjectFilter || statusFilter
+              ? 'No tests match your current search queries or filter settings. Try adjusting them.'
               : 'Get started by creating your very first assessment test. Click "Create New Test" above.'
             }
           </p>
           {(search || subjectFilter || statusFilter) && (
-            <button 
+            <button
               onClick={() => {
                 setSearch('')
                 setSubjectFilter('')
@@ -301,7 +301,7 @@ export const Dashboard: React.FC = () => {
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-10">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
@@ -317,7 +317,7 @@ export const Dashboard: React.FC = () => {
               <tbody className="divide-y divide-slate-150 text-sm">
                 {paginatedTests.map((test) => (
                   <tr key={test.id} className="hover:bg-slate-50/50 transition-colors group">
-                    
+
                     {/* Test details */}
                     <td className="py-4.5 px-6">
                       <div className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">
@@ -367,20 +367,19 @@ export const Dashboard: React.FC = () => {
                     <td className="py-4.5 px-6">
                       <span className={`
                         inline-flex items-center gap-1 py-1 px-2.5 rounded-full text-xs font-semibold uppercase tracking-wide
-                        ${test.status === 'live' 
-                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' 
+                        ${test.status === 'live'
+                          ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                           : test.status === 'scheduled'
-                          ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
-                          : 'bg-amber-50 text-amber-700 border border-amber-100'
+                            ? 'bg-indigo-50 text-indigo-700 border border-indigo-100'
+                            : 'bg-amber-50 text-amber-700 border border-amber-100'
                         }
                       `}>
-                        <span className={`w-1.5 h-1.5 rounded-full ${
-                          test.status === 'live' 
-                            ? 'bg-emerald-500' 
+                        <span className={`w-1.5 h-1.5 rounded-full ${test.status === 'live'
+                            ? 'bg-emerald-500'
                             : test.status === 'scheduled'
-                            ? 'bg-indigo-500 animate-pulse'
-                            : 'bg-amber-500 animate-pulse'
-                        }`} />
+                              ? 'bg-indigo-500 animate-pulse'
+                              : 'bg-amber-500 animate-pulse'
+                          }`} />
                         {test.status || 'draft'}
                       </span>
                     </td>
@@ -389,7 +388,7 @@ export const Dashboard: React.FC = () => {
                     <td className="py-4.5 px-6 hidden sm:table-cell text-slate-500 text-xs">
                       <div className="flex items-center gap-1.5">
                         <Calendar size={13} className="text-slate-400" />
-                        {test.created_at 
+                        {test.created_at
                           ? new Date(test.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
                           : 'Recent'
                         }
@@ -399,15 +398,15 @@ export const Dashboard: React.FC = () => {
                     {/* Action buttons */}
                     <td className="py-4.5 px-6 text-right">
                       <div className="flex items-center justify-end gap-2.5">
-                        <Link 
+                        <Link
                           to={`/tests/${test.id}/preview`}
                           title="Preview Test"
                           className="text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
                         >
                           <Eye size={16} />
                         </Link>
-                        
-                        <Link 
+
+                        <Link
                           to={`/tests/${test.id}/edit`}
                           title="Edit Details"
                           className="text-slate-400 hover:text-indigo-600 p-1.5 rounded-lg hover:bg-slate-100 transition-all cursor-pointer"
@@ -415,7 +414,7 @@ export const Dashboard: React.FC = () => {
                           <Edit3 size={16} />
                         </Link>
 
-                        <button 
+                        <button
                           onClick={() => handleDelete(test.id, test.name)}
                           title="Delete Test"
                           disabled={deleteMutation.isPending}
@@ -466,7 +465,7 @@ export const Dashboard: React.FC = () => {
                   })
                   .map((page, index, array) => {
                     const showEllipsisBefore = index > 0 && page - array[index - 1] > 1
-                    
+
                     return (
                       <React.Fragment key={page}>
                         {showEllipsisBefore && (
@@ -474,11 +473,10 @@ export const Dashboard: React.FC = () => {
                         )}
                         <button
                           onClick={() => setCurrentPage(page)}
-                          className={`w-8 h-8 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                            currentPage === page
+                          className={`w-8 h-8 rounded-lg text-xs font-semibold transition-all cursor-pointer ${currentPage === page
                               ? 'bg-indigo-600 text-white shadow-sm'
                               : 'border border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
-                          }`}
+                            }`}
                         >
                           {page}
                         </button>
